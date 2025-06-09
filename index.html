@@ -1165,6 +1165,9 @@
          * @param {function} [callback] - Опциональная функция обратного вызова для выполнения после получения ответа.
          */
         async function callGeminiAPI(currentHistory, currentParts, responseTarget, loadingTarget, callback = null) {
+            if (!currentParts.some(p => p.text && p.text.toLowerCase().includes('на русском'))) {
+    currentParts.unshift({ text: 'Пожалуйста, отвечай на русском языке. И будь как профессиональный психолог, создавай комфортную атмосферу.' });
+}
             loadingTarget.classList.remove('hidden');
             // Если responseTarget является тегом P, очищаем его текст. Если это DIV, очищаем его дочерние элементы.
             if (responseTarget.tagName === 'P') {
@@ -1208,6 +1211,25 @@
                         if (responseTarget.tagName === 'P') {
                             // Для ответа модального окна LLM, разрешить рендеринг Markdown
                             responseTarget.innerHTML = marked.parse(text); // Использование marked.js для Markdown
+                                const oldBtn = responseTarget.parentElement.querySelector('#llm-continue-btn');
+    if (oldBtn) oldBtn.remove();
+
+    // === Добавляем кнопку "Продолжить чат" под текстом в модальном окне ===
+    const continueBtn = document.createElement('button');
+    continueBtn.id = 'llm-continue-btn';
+    continueBtn.textContent = 'Продолжить чат';
+    continueBtn.classList.add('llm-button');
+    continueBtn.style.alignSelf = 'center';
+    continueBtn.style.marginTop = '1rem';
+
+    continueBtn.addEventListener('click', () => {
+        hideLlmModal();
+        chatContainer.classList.remove('hidden');
+        chatInput.value = text; // Подставляем тему в чат
+        chatInput.focus();
+    });
+
+    responseTarget.parentElement.appendChild(continueBtn);
                         } else { // Для сообщений чата
                             addChatMessage(text, 'ai');
                             // Добавление ответа AI в основную историю чата
