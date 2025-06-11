@@ -221,23 +221,24 @@
             transform: translateY(-2px);
         }
 
-        #send-chat-button, #llm-modal-submit-button, #message-box-close-button {
-            background-color: #e1d9ce;
-            color: #000000;
-            border: none;
-            border-radius: 10px;
-            padding: 0.75rem 0.05rem;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1rem;
-            cursor: pointer;
-            box-shadow: 0 0 8px rgba(138, 255, 138, 0.5); /* Нежное зеленое свечение */
-            transition: all 0.3s ease;
-        }
+#send-chat-button {
+    background-color: #e1d9ce;
+    color: #000000;
+    border: none;
+    border-radius: 10px;
+    padding: 0.75rem 1.25rem;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 0 8px rgba(138, 255, 138, 0.5);
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
 
-        #send-chat-button:hover, #llm-modal-submit-button:hover, #message-box-close-button:hover {
-            box-shadow: 0 0 12px rgba(138, 255, 138, 0.7), 0 0 20px rgba(138, 255, 138, 0.5);
-            transform: translateY(-2px);
-        }
+#send-chat-button:hover {
+    box-shadow: 0 0 12px rgba(138, 255, 138, 0.7), 0 0 20px rgba(138, 255, 138, 0.5);
+    transform: translateY(-2px);
+}
 
         /* Стили для содержимого конкретных страниц */
         .page-title {
@@ -482,22 +483,24 @@
             flex-grow: 1; /* Разрешить тексту занимать доступное пространство */
         }
 
-        .chat-input-area {
-            display: flex;
-            gap: 5px;
-        }
-
-        #chat-input {
-            flex-grow: 1;
-            padding: 0.75rem;
-            border: 1px solid #555;
-            border-radius: 10px;
-            background-color: #222;
-            color: #e1d9ce; /* Светлый текст для темного фона */
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1rem;
-            resize: vertical;
-        }
+.chat-input-area {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+#chat-input {
+    flex-grow: 1;
+    padding: 0.75rem;
+    border: 1px solid #555;
+    border-radius: 10px;
+    background-color: #222;
+    color: #e1d9ce;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    resize: none;
+    min-width: 0;
+}
 
         #chat-input:focus {
             outline: none;
@@ -1166,7 +1169,7 @@
          */
         async function callGeminiAPI(currentHistory, currentParts, responseTarget, loadingTarget, callback = null) {
             if (!currentParts.some(p => p.text && p.text.toLowerCase().includes('на русском'))) {
-    currentParts.unshift({ text: 'Отвечай на русском языке; твоя задача — структурировать и грамотно подать информацию, создавая при этом комфортную атмосферу для пользователя; информация должна быть компактной, но при этом полной и доступной для читателя; основные требования: используй чёткие и информативные заголовки; содержание должно быть изложено просто, без лишней "занудности", чтобы легко читалось и было понятно с первого раза; в конце текста обязательно указывай источники информации со ссылками; цель: сделать материал максимально удобным для восприятия, исключив возникновение дополнительных вопросов у читателя; отвечай кратко, но если пользователь попросит подробнее, распиши всё детально.' });
+    currentParts.unshift({ text: 'Отвечай на русском языке. твоя задача — структурировать и грамотно подать информацию, создавая при этом комфортную атмосферу для пользователя; информация должна быть компактной, но при этом полной и доступной для читателя; основные требования: используй чёткие и информативные заголовки; содержание должно быть изложено просто, без лишней "занудности", чтобы легко читалось и было понятно с первого раза; в конце текста обязательно указывай источники информации со ссылками; цель: сделать материал максимально удобным для восприятия, исключив возникновение дополнительных вопросов у читателя; отвечай кратко, но если пользователь попросит подробнее, распиши всё детально. ' });
 }
             loadingTarget.classList.remove('hidden');
             // Если responseTarget является тегом P, очищаем его текст. Если это DIV, очищаем его дочерние элементы.
